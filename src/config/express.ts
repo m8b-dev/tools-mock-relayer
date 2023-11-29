@@ -8,7 +8,7 @@ const createServer = (): express.Application => {
 
   app.disable("x-powered-by");
 
-  app.get("/health", (_req, res) => {
+  app.get("/antica/v1/health", (_req, res) => {
     res.send("ok");
   });
 

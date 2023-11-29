@@ -1,6 +1,13 @@
 import { createServer } from "./config/express";
+import {
+  CHAIN_ID,
+  OPERATOR_UP_ADDRESS,
+  QUOTA_CONTRACT_ADDRESS,
+} from "./globals";
 import { logger } from "./libs/logger.service";
+import { getSigner } from "./libs/signer.service";
 import quotaController from "./modules/quota/quota.controller";
+import { QuotaMode } from "./modules/quota/quota.service";
 import relayerController from "./modules/relayer/relayer.controller";
 import http from "http";
 import { AddressInfo } from "net";
@@ -10,12 +17,53 @@ const port = process.env.PORT || "3000";
 
 async function startServer() {
   const app = createServer();
+  const controllerAddress = getSigner().address;
 
-  app.use("/", relayerController);
-  app.use("/quota", quotaController);
+  app.use("/antica/v1/", relayerController);
+  app.use("/antica/v1/quota", quotaController);
 
   const server = http.createServer(app).listen({ host, port }, () => {
     const addressInfo = server.address() as AddressInfo;
+    app.use("/", (req, res) => {
+      const message = `
+<html lang="EN">
+<head>
+<title>UN1.IO RELAYER ANTICA</title>
+</head>
+<body>
+<div>
+Welcome to Antica UN1.IO Relayer.</br>
+It operates at LUKSO MAINNET.</br>
+=========================================================================</br>
+| If you came here by a browser it means that you are lost.</br>             
+| Let me help you. This relayer server operates at following parameters:</br>
+=========================================================================</br>
+| Controller: ${controllerAddress} [EOA]</br>
+| Operator: ${OPERATOR_UP_ADDRESS} [UP]</br>
+| QuotaMode: ${QuotaMode.TokenQuotaTransactionsCount} [RELAYER]</br>
+| Magic: 0xffffffff [BROWSER EXTENSION]</br>
+| Relayer: http://${addressInfo.address}:${addressInfo.port}/antica/v1</br>
+| Quota Token Address: ${QUOTA_CONTRACT_ADDRESS}</br>
+| Chain ID: ${CHAIN_ID}</br>
+=========================================================================</br>
+| How to attach your BROWSER EXTENSION to this relayer: </br>
+| Settings->Transaction Relay Services->Add Relayer </br>
+==========================================================================</br>
+| Name: UN1.ANTICA Antica </br>
+| Website: https://un1.io </br>
+| Api URL: http://${addressInfo.address}:${addressInfo.port}/antica/v1 </br>
+| Networks: LUKSO MAINNET - 42 </br>
+| Profiles: Here pick your profile you wish to use </br>
+============================================================================
+</div>
+</body>
+
+</html>
+
+`;
+      res.send(message);
+    });
+
     logger.info(
       `Server ready at http://${addressInfo.address}:${addressInfo.port}`
     );
