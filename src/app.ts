@@ -30,6 +30,48 @@ async function startServer() {
 <html lang="EN">
 <head>
 <title>UN1.IO RELAYER ANTICA</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.2/web3.min.js"
+        integrity="sha512-YD0p/mrfISfNjG4WS/8Dx1h6hZx0/IgCFJfQR8lSXf/y29Jy+JcZj1s65/Ar22xBwvK8xe1u1BQ/w2E2Edr22Q=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+</script>
+<script>
+    const isUPExtension =  (!!window.ethereum && !!window.lukso);
+    const addUpFunc = function () {
+    if (!isUPExtension) {
+    console.log("not a UP extension");
+    return;
+}
+
+    try {
+    const request = {
+    method: 'up_addTransactionRelayer', // https://docs.lukso.tech/standards/rpc-api#up_addtransactionrelayer
+    params: [
+{
+    name: "UN1.IO",
+    apiUrl: "${relayerUrl}",
+    chainIds: [${CHAIN_ID}],
+},
+    ],
+}
+    window.lukso.request(request).then(function () {
+        alert('Relayer Added');
+}).catch(function (err) {
+    if (4001 === err.code) {
+        alert('Hey, you already have the relayer! Go to settings of your up extension. ')
+    }
+    
+    console.log("did not import the profile", err);
+    
+    return;
+})
+} catch (error) {
+    console.log("Could not connect web3", error);
+    
+    return;
+}
+}
+</script>
 </head>
 <body>
 <div>
@@ -55,7 +97,16 @@ It operates at LUKSO MAINNET.</br>
 | Api URL: ${relayerUrl} </br>
 | Networks: LUKSO MAINNET - 42 </br>
 | Profiles: Here pick your profile you wish to use </br>
-============================================================================
+| IMPORTANT! YOU MUST HAVE YOUR UP EXTENSION UNLOCKED TO USE THIS BUTTON </br>
+||||||||||||||||||||||||||||||||
+<button id="buttonAddRelayer" onclick="addUpFunc()">Add UN1.IO relayer</button>
+||||||||||||||||||||||||||||||||</br>
+==========================================================================</br>
+=============X======X===X===X====XX=====================================</br>
+=============X======X===XX==X===X=X=====================================</br>
+=============X======X===X=X=X=====X=====================================</br>
+=============X======X===X==XX=====X=====================================</br>
+==============XXXXX====X===X===X=X=X===================================</br>
 </div>
 </body>
 
