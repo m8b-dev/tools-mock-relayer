@@ -43,7 +43,7 @@ It operates at LUKSO MAINNET.</br>
 | Operator: ${OPERATOR_UP_ADDRESS} [UP]</br>
 | QuotaMode: ${QuotaMode.TokenQuotaTransactionsCount} [RELAYER]</br>
 | Magic: 0xffffffff [BROWSER EXTENSION]</br>
-| Relayer: http://${addressInfo.address}:${addressInfo.port}/antica/v1</br>
+| Relayer: ${relayerUrl}</br>
 | Quota Token Address: ${QUOTA_CONTRACT_ADDRESS}</br>
 | Chain ID: ${CHAIN_ID}</br>
 =========================================================================</br>
