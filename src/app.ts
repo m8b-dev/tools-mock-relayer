@@ -14,6 +14,7 @@ import { AddressInfo } from "net";
 
 const host = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || "3000";
+const relayerUrl = "http://relayer.un1.io/antica/v1";
 
 async function startServer() {
   const app = createServer();
@@ -51,7 +52,7 @@ It operates at LUKSO MAINNET.</br>
 ==========================================================================</br>
 | Name: UN1.ANTICA Antica </br>
 | Website: https://un1.io </br>
-| Api URL: http://${addressInfo.address}:${addressInfo.port}/antica/v1 </br>
+| Api URL: ${relayerUrl} </br>
 | Networks: LUKSO MAINNET - 42 </br>
 | Profiles: Here pick your profile you wish to use </br>
 ============================================================================
