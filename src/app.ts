@@ -14,7 +14,7 @@ import { AddressInfo } from "net";
 
 const host = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || "3000";
-const relayerUrl = "http://relayer.un1.io/antica/v1";
+const relayerUrl = process.env.RELAYER_URL || "http://relayer.un1.io/antica/v1";
 
 async function startServer() {
   const app = createServer();
@@ -30,18 +30,14 @@ async function startServer() {
 <html lang="EN">
 <head>
 <title>UN1.IO RELAYER ANTICA</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.2/web3.min.js"
-        integrity="sha512-YD0p/mrfISfNjG4WS/8Dx1h6hZx0/IgCFJfQR8lSXf/y29Jy+JcZj1s65/Ar22xBwvK8xe1u1BQ/w2E2Edr22Q=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer">
-</script>
 <script>
+
     const isUPExtension =  (!!window.ethereum && !!window.lukso);
     const addUpFunc = function () {
     if (!isUPExtension) {
     console.log("not a UP extension");
     return;
-}
+    }
 
     try {
     const request = {
@@ -71,6 +67,18 @@ async function startServer() {
     return;
 }
 }
+
+
+window.onload = function(event) {
+    if (window.ethereum) {
+        const placeHolder = document.getElementById("relayButtonPlaceholder");
+        console.log(placeHolder);
+        const button = document.createElement("BUTTON");
+        button.id = "buttonAddRelayer";
+        button.onclick = function (event) { addUpFunc() };
+        button.innerHTML = "Add UN1.IO relayer";
+        placeHolder.appendChild(button);
+}}
 </script>
 </head>
 <body>
@@ -97,10 +105,8 @@ It operates at LUKSO MAINNET.</br>
 | Api URL: ${relayerUrl} </br>
 | Networks: LUKSO MAINNET - 42 </br>
 | Profiles: Here pick your profile you wish to use </br>
-| IMPORTANT! YOU MUST HAVE YOUR UP EXTENSION UNLOCKED TO USE THIS BUTTON </br>
-||||||||||||||||||||||||||||||||
-<button id="buttonAddRelayer" onclick="addUpFunc()">Add UN1.IO relayer</button>
-||||||||||||||||||||||||||||||||</br>
+| IMPORTANT! YOU MUST HAVE YOUR UP EXTENSION UNLOCKED TO ADD A RELAYER </br>
+<div id="relayButtonPlaceholder"></div></br>
 ==========================================================================</br>
 =============X======X===X===X====XX=====================================</br>
 =============X======X===XX==X===X=X=====================================</br>
