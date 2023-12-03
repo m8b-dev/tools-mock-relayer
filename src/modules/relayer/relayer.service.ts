@@ -110,16 +110,17 @@ export async function handleExecutionChargeback(
   const operators = await lsp7Token.getOperatorsOf(address);
 
   let found = false;
+  const signerAddress = getSigner().address.toLowerCase();
 
   for (const operator of operators) {
-    if (operator.toLowerCase() === OPERATOR_UP_ADDRESS.toLowerCase()) {
+    if (operator.toLowerCase() === signerAddress) {
       found = true;
     }
   }
 
   if (!found) {
     throw new Error(
-      `unauthorized profile ${address} for operator ${OPERATOR_UP_ADDRESS}`
+      `unauthorized profile ${address} for operator ${signerAddress}`
     );
   }
 
