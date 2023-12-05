@@ -77,10 +77,18 @@ export async function handleExecute(address: string, transaction: Transaction) {
       true
     );
     logger.info(`dispatched chargeback tx ${chargebackTx?.hash}`);
-    waitForTransaction(chargebackTx);
+    await waitForTransaction(chargebackTx);
   };
 
-  waitAndDispatch();
+  waitAndDispatch()
+    .then(() =>
+      logger.info(`Chargeback completed. ${transactionResponse.hash}`)
+    )
+    .catch((err) =>
+      logger.error(
+        `Chargeback error. ${transactionResponse.hash}, err: ${err.error}`
+      )
+    );
 
   const transactionHash = ethers.utils.keccak256(signature.signedTransaction);
   logger.info(`✉️ Dispatched transaction: ${transactionHash}`);

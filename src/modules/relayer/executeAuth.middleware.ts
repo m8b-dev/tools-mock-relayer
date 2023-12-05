@@ -145,7 +145,12 @@ export async function validateExecuteSignature(
     );
 
     if (isValidSignature !== IS_VALID_SIGNATURE_MAGIC_VALUE) {
-      throw new Error();
+      res
+        .status(httpStatus.BAD_REQUEST)
+        .send(
+          `invalid signature magic value. Required: ${IS_VALID_SIGNATURE_MAGIC_VALUE} `
+        );
+      return;
     }
   } catch {
     res.status(httpStatus.UNAUTHORIZED).send("Invalid Signature provided");
